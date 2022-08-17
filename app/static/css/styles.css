@@ -1,0 +1,88 @@
+body {
+    color: #eef0f2;}
+.header {
+    background-color: #2f4858;
+    text-align: center; }
+/* Add a black background color to the top navigation */
+.topnav {
+    background-color: #33658A;
+     text-align: center;
+     width: 100%; }
+ /* Style the links inside the navigation bar */
+.topnav a {
+    color: #EEF0F2;
+    text-align: center;
+    padding: 14px 150px;
+    text-decoration: none;
+    font-size: 17px;
+    display: inline-block;
+    margin: 0 auto; }
+/* Change the color of links on hover */
+.topnav a:hover {
+    background-color: #86BBD8;
+    color: #011638; }
+/* Add a color to the active/current link */
+.topnav a.active {
+    background-color: #0D21A1;
+    color: #EEF0F2; }
+/* Centered section inside the top navigation */
+.topnav-centered a {
+    text-align: center;
+    display: inline-block;
+    text-decoration: none;
+    margin: 0 auto; }
+/*placeholder*/
+::placeholder {
+    text-align: center; }
+ /*row*/
+ .row {
+    margin:40px auto }
+ /*container-fluid*/
+ .container-fluid {
+    color: black }
+ /*radio-inline*/
+ .radio-inline {
+    margin:0px 20px }
+/*remove border from list-group*/
+ li.borderless { 
+    border-top: 0 none; }
+/*input number size*/
+input[type='number']{
+    width: 50px; }
+/*Table*/
+table {
+    font-family: Arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;}
+td, th {
+    border: 1px solid #2f4858;
+    padding: 1px;}
+thead th {
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+    background-color: #33658A;
+    color: #EEF0F2;}
+td {
+    font-size: 14px;
+    padding: 8px 16px;}
+/* unvisited link */ 
+#claim_link:link {  
+    color: blue;}
+/* visited link */
+#claim_link:visited {    
+    color: purple;}
+/* mouse over link */
+#claim_link:hover {
+    color: lightblue;}
+/* selected link */
+#claim_link:active {
+    color: red;}
+#title {
+    margin:15px auto}
+#table {
+    margin:10px auto}
+#count {
+    margin:10px auto}
+
+

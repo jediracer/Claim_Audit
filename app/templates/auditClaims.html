@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claims Audit</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="icon" href="../static/images/auditicon.png" sizes="any">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+</head>
+<script type="text/javaScript">
+$(document).ready(function() {
+  $(".edit_tr").change(function() {
+//   $(".edit_tr").click(function() {  
+    var ID=$(this).attr('claim_nbr');
+
+  }).change(function(){
+      var ID=$(this).attr('id');
+      var audit_amount=$("#audit_amt_"+ID).val();
+      var audit_notes=$("#audit_notes_"+ID).val();
+      
+    //   var paid_amt=$("#paid_amt_"+ID).text();
+
+      var dataString = 'claim_nbr='+ ID +'&audit_amt='+audit_amount+'&audit_notes='+audit_notes;
+
+    //   if(parseInt(paid_amt)!=audit_amount){
+    //     document.getElementById("audit_notes_"+ID).setAttribute('required', '');
+    //     // alert("Notes are required when the Audit Amount does not match the Paid Amount \n \n" + ID)
+    //   }else{
+
+        if(audit_amount.length>0){
+            $.ajax({
+            type: "POST",
+            url: "/ajax",
+            data: dataString,
+            cache: false,
+            success: function(html)
+            {
+                $("#audit_amt_"+ID).html(audit_amount);
+            }
+            });
+        }else{
+            alert('Enter something.');
+        }
+    //   }
+  });
+    
+  $(".edit_audit_amt").mouseup(function() {
+   return false
+  });
+  
+});
+</script>
+<body>
+    <div class="header">
+        <div style="display:inline-block;vertical-align:center;padding-right: 30px;">
+            <img src="../static/images/auditicon.png" alt="Claim Audit" style="width:64px;height:64px;"/>
+        </div>
+        <div style="display:inline-block;vertical-align:center;font-size: 60px">
+            <p>Claims Audit</p>
+        </div>
+    </div>
+
+    <div class="topnav">
+        <div class="topnav-centered">
+            <a href="/"> Pull Claims for Audit</a>
+            <a class="active" href="/auditClaims">Audit Claims</a>
+            <a href="/reports">Reports</a>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row" id="title">
+            <div class="col-md-12">
+                <p style="text-align:center;font-size:24px;color:black;"><b>Audit Claims List</b></p>
+            </div>
+        </div>
+        <div class="row" id="table">    
+            <div class="col-md-10 offset-md-1" style="height:415px;overflow:auto;">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Claim Number</th>
+                            <th>Amount Paid</th>
+                            <th>Paid Date</th>
+                            <th>Adjuster</th>
+                            <th>Authority</th>
+                            <th>Audit Amount</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableData">
+                        {% for rec in records %}
+                            <tr id="{{rec.claim_nbr}}" class="edit_tr">
+                                <td class="edit_link">
+                                    <a href="https://beta.visualgap.com/claims/claimrequest?claimId={{rec.claim_id}}" name="audit_claim_nbr" target="_blank" id="claim_link" style='text-decoration: underline;'>
+                                        {{rec.claim_nbr}}
+                                    </a>
+                                </td>
+                                <td class="edit_td" id="paid_amt_{{rec.claim_nbr}}">{{rec.paid_amount}}</td>
+                                <td class="edit_td">{{rec.paid_date}}</td>
+                                <td class="edit_td">{{rec.adjuster}}</td>
+                                <td class="edit_td">{{rec.authority}}</td>
+                                <td class="edit_td">
+                                    <input type="text" name="audit_amt" size="10" value="{{rec.audit_amount}}" class="edit_audit_amt" id="audit_amt_{{rec.claim_nbr}}"/>
+                                </td>
+                                <td class="edit_td">
+                                    <input type="text" name="audit_notes" size="45" value="{{rec.notes}}" class="edit_audit_notes" id="audit_notes_{{rec.claim_nbr}}"/>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row" id="count">
+            <div class="col-md-12">
+                <p style="text-align:center;font-size:20px;color:black;"><b>{{rec_count}} Claims</b></p>
+            </div>
+        </div>
+        
+    </div>
+</body>
+</html>

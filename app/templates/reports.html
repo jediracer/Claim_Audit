@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js" 
+        integrity="sha512-ElRFoEQdI5Ht6kZvyzXhYG9NqjtkmlkfYk0wr6wHxU9JEHakS7UJZNeml5ALk+8IKlU6jDgMabC3vkumRokgJA==" crossorigin="anonymous" 
+        referrerpolicy="no-referrer">
+    </script>
+    <title>Claims Audit</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="icon" href="../static/images/auditicon.png" sizes="any">
+</head>
+<body>
+    <div class="header">
+        <div style="display:inline-block;vertical-align:center;padding-right: 30px;">
+            <img src="../static/images/auditicon.png" alt="Claim Audit" style="width:64px;height:64px;"/>
+        </div>
+        <div style="display:inline-block;vertical-align:center;font-size: 60px">
+            <p>Claims Audit</p>
+        </div>
+    </div>
+
+    <div class="topnav">
+        <div class="topnav-centered">
+            <a href="/"> Pull Claims for Audit</a>
+            <a href="/auditClaims">Audit Claims</a>
+            <a class="active" href="/reports">Reports</a>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <div class="row align-items-center justify-content-center">
+            <p>Reports</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col=md-4">
+                <canvas id="myChart" max-width="50" max-height="50"></canvas>
+                <script>
+                    let chartColors = ["orange", "blue"];
+                    const ctx = document.getElementById('myChart').getContext('2d');
+                    // const myChart = new Chart(ctx, {
+                    new Chart("myChart", {    
+                        type:"pie",
+                        data: {
+                            labels: {{labels | safe}},
+                            datasets: [{
+                                backgroundColor: chartColors,
+                                data: {{values | safe}}
+                            }]
+                        },
+                        options: {
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: "Accuracy",
+                                    color: "rgba(13,33,161,1)",
+                                    fontSize: 20,
+                                    fontStyle: "bold"
+                                }
+                            }
+                        }
+                    });
+                </script>
+            </div>    
+        </div>
+    </div>
+    
+</body>
+</html>

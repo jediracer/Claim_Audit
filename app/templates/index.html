@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claims Audit</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+    <link rel="stylesheet" href="../static/css/styles.css">
+    <link rel="icon" href="../static/images/auditicon.png" sizes="any">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+</head>
+
+<script type="text/javaScript">
+    $(document).ready(function() {
+        $('input[name=div_sel]').change(function() {  
+            let div = $( 'input[name=div_sel]:checked' ).val();  
+            if(div=='Frost'){
+                document.getElementById("beginDate").value = {{frost_date | safe}}
+                document.getElementById("beginDate").min = {{frost_date | safe}}
+                document.getElementById("endDate").value = {{frost_end_date | safe}}
+                document.getElementById("endDate").min = {{frost_date | safe}}
+            }else{
+                document.getElementById("beginDate").value = {{nac_date |safe}}
+                document.getElementById("beginDate").min = {{nac_date |safe}}
+                document.getElementById("endDate").value = {{nac_end_date | safe}}
+                document.getElementById("endDate").min = {{nac_date |safe}}
+            }
+        });
+    });
+</script>
+
+<body>
+
+    <div class="header">
+        <div style="display:inline-block;vertical-align:center;padding-right: 30px;">
+            <img src="../static/images/auditicon.png" alt="Claim Audit" style="width:64px;height:64px;"/>
+        </div>
+        <div style="display:inline-block;vertical-align:center;font-size: 60px">
+            <p>Claims Audit</p>
+        </div>
+    </div>
+
+    <div class="topnav">
+        <div class="topnav-centered">
+            <a class="active" href="/"> Pull Claims for Audit</a>
+            <a href="/auditClaims">Audit Claims</a>
+            <a href="/reports">Reports</a>
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <form method='POST' >
+
+            <div class="row align-items-center justify-content-center">
+                 <fieldset id="division">
+                     <p id="div_head" style="font-size:20px; text-align: center;"><b>Select Division:</b></p>
+                     <label class="radio-inline"> 
+                         <input type="radio" id="divSel" name="div_sel" value="Frost">  Frost
+                     </label>
+                     <label class="radio-inline">
+                         <input type="radio" id="divSel" name="div_sel" value="NAC">  National Auto Care
+                     </label>
+                 </fieldset>
+            </div>            
+
+            <div class="row align-items-center justify-content-center">
+                <div class="col-md-2 offset-md-1">
+                    <div class="borderless">
+                        <p style="font-size:20px;"><b>Date Range:</b></p>
+                        <ul class="list-group">
+                            <li class="list-group-item" style="border: none">
+                                <label for="beg_date"><b>Start Date:</b></label>
+                                <input type="date" name="begin_date" id="beginDate"/>
+                            </li>
+                            <li class="list-group-item" style="border: none">
+                                <label for="end_date"><b>End Date:</b></label>
+                                <input type="date" name="end_date" id="endDate"/>
+                            </li>
+                        </ul>
+                    </div>  
+                </div>
+
+                <div class="col-md-4 offset-md-1">
+                    <fieldset>
+                        <legend style="font-size:20px;"><b>Select Number or Percentage of Claims:</b></legend>
+                        <div>
+                            <input type="radio" id="num_claims" name="claim_sel" value="num" checked>
+                                <label for="num_claims">Number of Claims:   </label>
+                            <input type="number" placeholder=5 name="nbr_claims" min=1 max=10/>
+                        </div>
+                        <div>
+                            <input type="radio" id="per_claims" name="claim_sel" value="per">
+                                <label for="per_claims">Percentage of Claims:   </label>
+                            <input type="number" placeholder=10 name="percent_claims" min=1 max=100/>%
+                        </div>
+                        <p style="text-align:left;font-size:10px;color:black;">(A minimum of 5 claims will be audited unless the adjuster authorized less than 5 claims.)</p>
+                    </fieldset>
+                </div>
+
+                <div class="col-md-2 offset-md-1">
+                    <input type="submit" id="submit"/>
+                </div>
+
+            </div>
+
+        </form>
+        <div class="row align-items-center justify-content-center">
+            <div class="col-md-2 offset-md-1">
+                <p style="text-align:center;font-size:16px;color:red;">{{err_msg}}</p>
+            </div>
+            <div class="col-md-9">
+                <p style="text-align:center;font-size:16px;color:black;">{{comp_msg}}</p>  
+            </div>
+        </div>
+        
+    </div>
+    
+</body>
+</html>
