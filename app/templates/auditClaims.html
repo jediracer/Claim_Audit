@@ -13,23 +13,16 @@
 </head>
 <script type="text/javaScript">
 $(document).ready(function() {
-  $(".edit_tr").change(function() {
-//   $(".edit_tr").click(function() {  
+  $(".edit_tr").change(function() { 
     var ID=$(this).attr('claim_nbr');
 
   }).change(function(){
       var ID=$(this).attr('id');
-      var audit_amount=$("#audit_amt_"+ID).val();
+      var audit_amt=$("#audit_amt_"+ID).val();
+      var audit_amount=audit_amt.replace(/[^0-9.-]+/g,"");
       var audit_notes=$("#audit_notes_"+ID).val();
-      
-    //   var paid_amt=$("#paid_amt_"+ID).text();
-
+      var paid_amt=$("#paid_amt_"+ID).text();
       var dataString = 'claim_nbr='+ ID +'&audit_amt='+audit_amount+'&audit_notes='+audit_notes;
-
-    //   if(parseInt(paid_amt)!=audit_amount){
-    //     document.getElementById("audit_notes_"+ID).setAttribute('required', '');
-    //     // alert("Notes are required when the Audit Amount does not match the Paid Amount \n \n" + ID)
-    //   }else{
 
         if(audit_amount.length>0){
             $.ajax({
@@ -40,19 +33,19 @@ $(document).ready(function() {
             success: function(html)
             {
                 $("#audit_amt_"+ID).html(audit_amount);
+                window.location.href = '/auditClaims';
             }
             });
         }else{
             alert('Enter something.');
         }
-    //   }
   });
     
   $(".edit_audit_amt").mouseup(function() {
    return false
   });
-  
 });
+
 </script>
 <body>
     <div class="header">
@@ -100,7 +93,7 @@ $(document).ready(function() {
                                         {{rec.claim_nbr}}
                                     </a>
                                 </td>
-                                <td class="edit_td" id="paid_amt_{{rec.claim_nbr}}">{{rec.paid_amount}}</td>
+                                <td class="edit_td" id="paid_amt_{{rec.claim_nbr}}">${{rec.paid_amount}}</td>
                                 <td class="edit_td">{{rec.paid_date}}</td>
                                 <td class="edit_td">{{rec.adjuster}}</td>
                                 <td class="edit_td">{{rec.authority}}</td>
@@ -109,6 +102,7 @@ $(document).ready(function() {
                                 </td>
                                 <td class="edit_td">
                                     <input type="text" name="audit_notes" size="45" value="{{rec.notes}}" class="edit_audit_notes" id="audit_notes_{{rec.claim_nbr}}"/>
+                                    <img id="error_{{rec.claim_nbr}}" src="/static/images/exclamation-mark.png" width="25" height="25" style="visibility:hidden"/>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -124,5 +118,17 @@ $(document).ready(function() {
         </div>
         
     </div>
+    <script type="text/javaScript">
+        $("#tableData").children().each(function(){
+            var ID=$(this).prop('id');
+            var audit_amount=$("#audit_amt_"+ID).val();
+            var paid_amt=$("#paid_amt_"+ID).text();
+            
+            if(parseInt(paid_amt)!=audit_amount && audit_amount.length != 0){
+                var icon = document.getElementById("error_"+ID);
+                icon.style.visibility = 'visible';
+            }                    
+        })
+    </script>
 </body>
 </html>

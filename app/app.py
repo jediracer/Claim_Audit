@@ -1,7 +1,7 @@
 # Conda claimaudit
 
 # Import Depnedencies
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, redirect, url_for
 from flask_mysqldb import MySQL, MySQLdb
 import pandas as pd
 import os
@@ -220,8 +220,8 @@ def index():
                             nac_end_date=nac_end_date_value, frost_end_date=frost_end_date_value)
 
 @app.route('/auditClaims')
-def auditClaims():
-    audit_list_sql = '''SELECT claim_id, claim_nbr, CONCAT('$', FORMAT(paid_amount,2)) AS paid_amount, DATE_FORMAT(paid_date, '%Y-%m-%d') AS paid_date, 
+def auditClaims():#CONCAT('$', FORMAT(paid_amount,2))
+    audit_list_sql = '''SELECT claim_id, claim_nbr, FORMAT(paid_amount,2) AS paid_amount, DATE_FORMAT(paid_date, '%Y-%m-%d') AS paid_date, 
                             adjuster, CONCAT('$', FORMAT(authority,2)) AS authority, 
                             IFNULL(CONCAT('$', FORMAT(audit_amount,2)),'') AS audit_amount, IFNULL(notes,'') AS notes
                         FROM claims
