@@ -13,23 +13,31 @@
 </head>
 
 <script type="text/javaScript">
+var today = new Date();
+var dd = String(today.getDate()).padStart(2, '0');
+var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var yyyy = today.getFullYear();
+
+today = yyyy + '-' + mm + '-' + dd;
+
+document.write(today);
     $(document).ready(function() {
         $('input[name=div_sel]').change(function() {  
             let div = $( 'input[name=div_sel]:checked' ).val();  
             if(div=='Frost'){
                 document.getElementById("beginDate").value = {{frost_date | safe}}
                 document.getElementById("beginDate").min = {{frost_date | safe}}
-                document.getElementById("beginDate").max = Date()
+                document.getElementById("beginDate").max = today
                 document.getElementById("endDate").value = {{frost_end_date | safe}}
                 document.getElementById("endDate").min = {{frost_date | safe}}
-                document.getElementById("endDate").max = Date()
+                document.getElementById("endDate").max = today
             }else{
                 document.getElementById("beginDate").value = {{nac_date |safe}}
                 document.getElementById("beginDate").min = {{nac_date |safe}}
-                document.getElementById("beginDate").max = Date()
+                document.getElementById("beginDate").max = today
                 document.getElementById("endDate").value = {{nac_end_date | safe}}
                 document.getElementById("endDate").min = {{nac_date |safe}}
-                document.getElementById("endDate").max = Date()
+                document.getElementById("endDate").max = today
             }
         });
     });
