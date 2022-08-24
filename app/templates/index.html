@@ -19,13 +19,17 @@
             if(div=='Frost'){
                 document.getElementById("beginDate").value = {{frost_date | safe}}
                 document.getElementById("beginDate").min = {{frost_date | safe}}
+                document.getElementById("beginDate").max = Date()
                 document.getElementById("endDate").value = {{frost_end_date | safe}}
                 document.getElementById("endDate").min = {{frost_date | safe}}
+                document.getElementById("endDate").max = Date()
             }else{
                 document.getElementById("beginDate").value = {{nac_date |safe}}
                 document.getElementById("beginDate").min = {{nac_date |safe}}
+                document.getElementById("beginDate").max = Date()
                 document.getElementById("endDate").value = {{nac_end_date | safe}}
                 document.getElementById("endDate").min = {{nac_date |safe}}
+                document.getElementById("endDate").max = Date()
             }
         });
     });
