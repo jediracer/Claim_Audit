@@ -32,21 +32,23 @@
         </div>
     </div>
 
-    <div class="container-fluid">
-        <div class="row align-items-center justify-content-center">
-            <p>Reports</p>
-        </div>
-    </div>
-
     <div class="container">
-        <div class="row">
-            <div class="col=md-4">
-                <canvas id="myChart" max-width="50" max-height="50"></canvas>
-                <script>
+        <div class="row" id="header-row">
+            <div class="col-md-6">
+                <p style="text-align:center;color:black"><b>Frost Accuracy: {{frost_accuracy}}%</b></p>
+            </div>
+            <div class="col-md-6">
+                <p style="text-align:center;color:black"><b>NAC Accuracy: {{nac_accuracy}}%</b></p>
+            </div>
+        </div>  
+
+        <div class="row" id="div_accuracy">
+            <div class="col-md-6" id="div_charts">
+                <canvas id="frost_acc"></canvas>
+                <script type="text/javaScript">
                     let chartColors = ["orange", "blue"];
-                    const ctx = document.getElementById('myChart').getContext('2d');
-                    // const myChart = new Chart(ctx, {
-                    new Chart("myChart", {    
+                    const ctx = document.getElementById('frost_acc').getContext('2d');
+                    new Chart("frost_acc", {    
                         type:"pie",
                         data: {
                             labels: {{labels | safe}},
@@ -56,20 +58,64 @@
                             }]
                         },
                         options: {
-                            plugins: {
-                                title: {
-                                    display: true,
-                                    text: "Accuracy",
-                                    color: "rgba(13,33,161,1)",
-                                    fontSize: 20,
-                                    fontStyle: "bold"
-                                }
-                            }
+                            maintainAspectRatio: false
                         }
                     });
                 </script>
-            </div>    
+            </div>
+            <div class="col-md-6" id="div_charts">
+                <canvas id="nac_acc"></canvas>
+                <script type="text/javaScript">
+                    let chartColors = ["orange", "blue"];
+                    const ctx = document.getElementById('nac_acc').getContext('2d');
+                    new Chart("nac_acc", {    
+                        type:"pie",
+                        data: {
+                            labels: ["error", "correct"],
+                            datasets: [{
+                                backgroundColor: chartColors,
+                                data: [1, 1]
+                            }]
+                        },
+                        options: {
+                            maintainAspectRatio: false
+                        }
+                    });
+                </script>
+            </div> 
         </div>
+
+        <hr class="rounded">
+
+        <div class="row" id="acc_title">
+            <div class="col-sm-12">
+                <p id="acc_title">Accuracy by Adjuster</p>   
+            </div>
+        </div>
+
+        <div class="row" id="selection-row">
+            <div class="col-sm-3">
+                <label for="acc_begin_date" id="date_labels">Start Date:</label>
+                <input type="date" name="acc_begin_date" id="accBeginDate" min="2022-06-01" value="{{begDate}}"/>
+            </div>
+            <div class="col-sm-3">
+                <label for="acc_end_date" id="date_labels">End Date:</label>
+                <input type="date" name="acc_end_date" id="accEndDate" min="2022-06-01" value="{{endDate}}"/>
+            </div>
+            <div class="col-sm-4">
+                <label for="adj_sel" id="date_labels">Adjuster:</label>
+                <select name="adj_sel">
+                    {% for adj in adjs %}
+                        <option value="{{adj}}">{{adj}}</option>
+                    {% endfor %}    
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <input type="button" onclick="displayCharts()" value="Submit"></inpout>
+            </div>
+        </div>
+
+
     </div>
     
 </body>

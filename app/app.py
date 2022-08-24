@@ -7,7 +7,8 @@ import pandas as pd
 import os
 import mysql.connector as mc
 import numpy as np
-import datetime;
+import datetime
+import re
 
 from config import vgc_host, vgc_u, vgc_pw, mysql_host, mysql_u, mysql_pw
 
@@ -262,7 +263,31 @@ def reports():
         values.append(int(num))
     labels = summary_data[1]
 
-    return render_template('reports.html', labels = labels, values=values)
+    # accuracy percentages
+    frost_accuracy = abs(100-round(100*(values[0] / (values[1] + values[0])),2)) 
+    nac_accuracy = 0.00
+
+    # list of adjusters
+    adj_sql = '''SELECT DISTINCT adjuster
+                    FROM authority
+                    ORDER BY adjuster;'''
+    
+    adj_results = mysql_q(mysql_u, mysql_pw, mysql_host, 'claim_audit', adj_sql, 0, 0)
+
+    # clean and add resultes to list
+    adjusters = []
+    for adj in adj_results:
+        clean_adj = re.sub('[^a-zA-Z0-9 \n\.]', '', str(adj))
+        adjusters.append(clean_adj)
+
+    # default dates
+    today = datetime.date.today()
+    # first = today.replace(day=1)
+    last_month = today.replace(day=1) - datetime.timedelta(days=1)
+    first_month = last_month.replace(day=1)
+
+    return render_template('reports.html', labels = labels, values=values, frost_accuracy=frost_accuracy, nac_accuracy=nac_accuracy, adjs=adjusters,
+                                begDate=first_month, endDate=last_month)
 
 @app.route('/', methods=['POST'])
 def getAuditClaims():
